@@ -18,6 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
       $resMsg = "エラーが発生しました。もう一度お試しください。";
     }
+
+    unset($_SESSION['csrfToken']);
   } else {
     header("Location: index.php");
     exit;
@@ -27,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
