@@ -1,32 +1,33 @@
 <?php
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  $postToken = isset($_POST["csrfToken"]) && is_string($_POST["csrfToken"]) ? $_POST["csrfToken"] : '';
-  $sessionToken = isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
-  
-  if ($postToken !== "" && $sessionToken !== "" && $postToken === $sessionToken) {
-    $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
-    
-    // 完了メール配信設定
-    $to = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
-    $subject = "お問い合わせがありました";
-    $headers = "From: ochi.azusa@spiral-platform.co.jp";
-    $message = "お問い合わせ完了メール送信！";
-    if (mail($to, $subject, $message, $headers)) {
-      $resMsg = "お問い合わせが送信されました。";
-    } else {
-      $resMsg = "エラーが発生しました。もう一度お試しください。";
-    }
-
-    unset($_SESSION['csrfToken']);
-  } else {
-    header("Location: index.php");
-    exit;
-  }
-} else {
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
   header("Location: index.php");
+  exit;
 }
+
+$postToken = isset($_POST["csrfToken"]) && is_string($_POST["csrfToken"]) ? $_POST["csrfToken"] : '';
+$sessionToken = isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
+
+if ($postToken === "" || $sessionToken === "" || $postToken !== $sessionToken) {
+  header("Location: index.php");
+  exit;
+}
+
+$email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
+
+// 完了メール配信設定
+$to = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
+$subject = "お問い合わせがありました";
+$headers = "From: ochi.azusa@spiral-platform.co.jp";
+$message = "お問い合わせ完了メール送信！";
+if (mail($to, $subject, $message, $headers)) {
+  $resMsg = "お問い合わせが送信されました。";
+} else {
+  $resMsg = "エラーが発生しました。もう一度お試しください。";
+}
+
+unset($_SESSION['csrfToken']);
 ?>
 <!DOCTYPE html>
 <html lang="ja">

@@ -1,22 +1,22 @@
 <?php
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  $postToken = isset($_POST["csrfToken"]) && is_string($_POST["csrfToken"]) ? $_POST["csrfToken"] : '';
-  $sessionToken = isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
-  
-  if ($postToken !== "" && $sessionToken !== "" && $postToken === $sessionToken) {
-    $name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : '';
-    $email = isset($_POST["email"]) && is_string($_POST["email"]) ? $_POST["email"] : '';
-    $message = isset($_POST["message"]) && is_string($_POST["message"]) ? $_POST["message"] : '';
-  } else {
-    header("Location: index.php");
-    exit;
-  }
-} else {
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
   header("Location: index.php");
   exit;
 }
+
+$postToken = isset($_POST["csrfToken"]) && is_string($_POST["csrfToken"]) ? $_POST["csrfToken"] : '';
+$sessionToken = isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
+
+if ($postToken === "" || $sessionToken === "" || $postToken !== $sessionToken) {
+  header("Location: index.php");
+  exit;
+}
+
+$name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : '';
+$email = isset($_POST["email"]) && is_string($_POST["email"]) ? $_POST["email"] : '';
+$message = isset($_POST["message"]) && is_string($_POST["message"]) ? $_POST["message"] : '';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
