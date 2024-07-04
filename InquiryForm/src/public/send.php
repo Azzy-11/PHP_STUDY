@@ -1,16 +1,26 @@
 <?php
+session_start();
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
+  $postToken = isset($_POST["csrfToken"]) && is_string($_POST["csrfToken"]) ? $_POST["csrfToken"] : '';
+  $sessionToken = isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
   
-  // 完了メール配信設定
-  $to = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
-  $subject = "お問い合わせがありました";
-  $headers = "From: ochi.azusa@spiral-platform.co.jp";
-  $message = "お問い合わせ完了メール送信！";
-  if (mail($to, $subject, $message, $headers)) {
-    $resMsg = "お問い合わせが送信されました。";
+  if ($postToken !== "" && $sessionToken !== "" && $postToken === $sessionToken) {
+    $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
+    
+    // 完了メール配信設定
+    $to = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
+    $subject = "お問い合わせがありました";
+    $headers = "From: ochi.azusa@spiral-platform.co.jp";
+    $message = "お問い合わせ完了メール送信！";
+    if (mail($to, $subject, $message, $headers)) {
+      $resMsg = "お問い合わせが送信されました。";
+    } else {
+      $resMsg = "エラーが発生しました。もう一度お試しください。";
+    }
   } else {
-    $resMsg = "エラーが発生しました。もう一度お試しください。";
+    header("Location: index.php");
+    exit;
   }
 } else {
   header("Location: index.php");
