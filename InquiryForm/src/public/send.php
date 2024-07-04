@@ -13,15 +13,38 @@ if ($postToken === "" || $sessionToken === "" || $postToken !== $sessionToken) {
   header("Location: index.php");
   exit;
 }
+$name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : '';
+$email = isset($_POST["email"]) && is_string($_POST["email"]) ? $_POST["email"] : '';
+$message = isset($_POST["message"]) && is_string($_POST["message"]) ? $_POST["message"] : '';
+// $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
 
-$email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
+//バリデーション
+if ($name === "") {
+  $_SESSION['flash']['name'] = "お名前は必須項目です";
+}
+$_SESSION['original']['name'] = $name;
+
+if ($email === "") {
+  $_SESSION['flash']['email'] = "メールアドレスは必須項目です";
+}
+$_SESSION['original']['email'] = $email;
+
+if ($message === "") {
+  $_SESSION['flash']['message'] = "お問い合わせ内容は必須項目です";
+}
+$_SESSION['original']['message'] = $message;
+
+if ($name === "" || $email === "" | $message === "") {
+  header("Location: index.php");
+  exit;
+}
 
 // 完了メール配信設定
 $to = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
 $subject = "お問い合わせがありました";
 $headers = "From: ochi.azusa@spiral-platform.co.jp";
-$message = "お問い合わせ完了メール送信！";
-if (mail($to, $subject, $message, $headers)) {
+$body = "お問い合わせ完了メール送信！";
+if (mail($to, $subject, $body, $headers)) {
   $resMsg = "お問い合わせが送信されました。";
 } else {
   $resMsg = "エラーが発生しました。もう一度お試しください。";

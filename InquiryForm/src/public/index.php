@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+$flash = isset($_SESSION['flash']) ? $_SESSION['flash'] : [];
+unset($_SESSION['flash']);
+$original = isset($_SESSION['original']) ? $_SESSION['original'] : [];
+unset($_SESSION['original']);
+
 $csrfToken = bin2hex(random_bytes(16));
 $_SESSION['csrfToken'] = $csrfToken;
 ?>
@@ -16,11 +21,17 @@ $_SESSION['csrfToken'] = $csrfToken;
   <h1>お問い合わせフォーム</h1>
   <form action="confirm.php" method="post">
     <label for="name">名前</label><br>
-    <input type="text" name="name" id="name"><br>
+    <input type="text" name="name" id="name" value="<?= isset($original['name']) ? $original['name'] : null ?>" required><br>
+    <?= isset($flash['name']) ? $flash['name'] . '<br>' : null ?>
+
     <label for="email">メールアドレス</label><br>
-    <input type="email" name="email" id="email"><br>
+    <input type="email" name="email" id="email" value="<?= isset($original['email']) ? $original['email'] : null ?>" required><br>
+    <?= isset($flash['email']) ? $flash['email'] . '<br>' : null ?>
+
     <label for="message">お問い合わせ内容</label><br>
-    <textarea name="message" id="message"></textarea><br>
+    <textarea name="message" id="message" required><?= isset($original['message']) ? $original['message'] : null ?></textarea><br>
+    <?= isset($flash['message']) ? $flash['message'] . '<br>' : null ?>
+
     <input type="hidden" name="csrfToken" value="<?= $csrfToken; ?>">
     <input type="submit" value="送信">
   </form>
