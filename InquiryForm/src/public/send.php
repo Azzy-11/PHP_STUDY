@@ -47,6 +47,10 @@ if ($name === "" || $email === "" || $message === "") {
   header("Location: index.php");
   exit;
 }
+if (mb_strlen($name) > 17 || mb_strlen($email) > 257 || mb_strlen($message) > 301) {
+  header("Location: index.php");
+  exit;
+}
 
 // 完了メール配信設定
 $to = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
