@@ -43,7 +43,7 @@ if (mb_strlen($message) > 301) {
 }
 $_SESSION['original']['message'] = $message;
 
-if ($name === "" || $email === "" | $message === "") {
+if ($name === "" || $email === "" || $message === "") {
   header("Location: index.php");
   exit;
 }
