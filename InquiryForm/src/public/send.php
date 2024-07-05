@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-  header("Location: index.php");
-  exit;
-}
+require_once('../libs/Request.php');
+
+$method = new Request($_SERVER["REQUEST_METHOD"]);
+$method->redirectToIndex();
 
 $postToken = isset($_POST["csrfToken"]) && is_string($_POST["csrfToken"]) ? $_POST["csrfToken"] : '';
 $sessionToken = isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
