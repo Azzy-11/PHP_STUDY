@@ -70,7 +70,7 @@ unset($_SESSION['csrfToken']);
 </head>
 <body>
   <h1>お問い合わせフォーム 完了</h1>
-  <p><?php $resMsg; ?></p>
+  <p><?php echo $resMsg; ?></p>
   <p><a href="index.php">お問い合わせフォームに戻る</a></p>
 </body>
 </html>

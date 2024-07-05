@@ -43,7 +43,7 @@ if (mb_strlen($message) > 301) {
 }
 $_SESSION['original']['message'] = $message;
 
-if ($name === "" || $email === "" | $message === "") {
+if ($name === "" || $email === "" || $message === "") {
   header("Location: index.php");
   exit;
 }
@@ -60,22 +60,22 @@ if ($name === "" || $email === "" | $message === "") {
   <table>
     <tr>
       <th>名前</th>
-      <td><?php htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></td>
+      <td><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></td>
     </tr>
     <tr>
       <th>メールアドレス</th>
-      <td><?php htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></td>
+      <td><?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></td>
     </tr>
     <tr>
       <th>お問い合わせ内容</th>
-      <td><?php htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></td>
+      <td><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></td>
     </tr>
   </table>
   <form action="send.php" method="post">
-    <input type="hidden" name="name" value="<?php htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="hidden" name="email" value="<?php htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="hidden" name="message" value="<?php htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="hidden" name="csrfToken" value="<?php htmlspecialchars($postToken, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="name" value="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="message" value="<?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="csrfToken" value="<?php echo htmlspecialchars($postToken, ENT_QUOTES, 'UTF-8'); ?>">
     <input type="submit" value="送信">
     <button type="button" onClick="history.back()">戻る</button>
   </form>
