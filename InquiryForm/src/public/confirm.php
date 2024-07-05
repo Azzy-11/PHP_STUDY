@@ -15,22 +15,31 @@ if ($postToken === "" || $sessionToken === "" || $postToken !== $sessionToken) {
 }
 
 $name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : '';
-$email = isset($_POST["email"]) && is_string($_POST["email"]) ? $_POST["email"] : '';
+$email = isset($_POST["email"]) && is_string($_POST["email"]) ? filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL) : '';
 $message = isset($_POST["message"]) && is_string($_POST["message"]) ? $_POST["message"] : '';
 
 //バリデーション
 if ($name === "") {
   $_SESSION['flash']['name'] = "お名前は必須項目です";
 }
+if (mb_strlen($name) > 17) {
+  $_SESSION['flash']['name'] = "お名前は16文字以内で入力してください";
+}
 $_SESSION['original']['name'] = $name;
 
 if ($email === "") {
   $_SESSION['flash']['email'] = "メールアドレスは必須項目です";
 }
+if (mb_strlen($email) > 257) {
+  $_SESSION['flash']['email'] = "メールアドレスは256文字以内で入力してください";
+}
 $_SESSION['original']['email'] = $email;
 
 if ($message === "") {
   $_SESSION['flash']['message'] = "お問い合わせ内容は必須項目です";
+}
+if (mb_strlen($message) > 301) {
+  $_SESSION['flash']['message'] = "お問い合わせ内容は300文字以内で入力してください";
 }
 $_SESSION['original']['message'] = $message;
 
@@ -38,7 +47,6 @@ if ($name === "" || $email === "" | $message === "") {
   header("Location: index.php");
   exit;
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -52,22 +60,22 @@ if ($name === "" || $email === "" | $message === "") {
   <table>
     <tr>
       <th>名前</th>
-      <td><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></td>
+      <td><?php htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></td>
     </tr>
     <tr>
       <th>メールアドレス</th>
-      <td><?= htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></td>
+      <td><?php htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></td>
     </tr>
     <tr>
       <th>お問い合わせ内容</th>
-      <td><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></td>
+      <td><?php htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></td>
     </tr>
   </table>
   <form action="send.php" method="post">
-    <input type="hidden" name="name" value="<?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="hidden" name="email" value="<?= htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="hidden" name="message" value="<?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="hidden" name="csrfToken" value="<?= htmlspecialchars($postToken, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="name" value="<?php htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="email" value="<?php htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="message" value="<?php htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="csrfToken" value="<?php htmlspecialchars($postToken, ENT_QUOTES, 'UTF-8'); ?>">
     <input type="submit" value="送信">
     <button type="button" onClick="history.back()">戻る</button>
   </form>

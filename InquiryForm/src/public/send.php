@@ -13,24 +13,33 @@ if ($postToken === "" || $sessionToken === "" || $postToken !== $sessionToken) {
   header("Location: index.php");
   exit;
 }
+
 $name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : '';
-$email = isset($_POST["email"]) && is_string($_POST["email"]) ? $_POST["email"] : '';
+$email = isset($_POST["email"]) && is_string($_POST["email"]) ? filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL) : '';
 $message = isset($_POST["message"]) && is_string($_POST["message"]) ? $_POST["message"] : '';
-// $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
 
 //バリデーション
 if ($name === "") {
   $_SESSION['flash']['name'] = "お名前は必須項目です";
+}
+if (mb_strlen($name) > 17) {
+  $_SESSION['flash']['name'] = "お名前は16文字以内で入力してください";
 }
 $_SESSION['original']['name'] = $name;
 
 if ($email === "") {
   $_SESSION['flash']['email'] = "メールアドレスは必須項目です";
 }
+if (mb_strlen($email) > 257) {
+  $_SESSION['flash']['email'] = "メールアドレスは256文字以内で入力してください";
+}
 $_SESSION['original']['email'] = $email;
 
 if ($message === "") {
   $_SESSION['flash']['message'] = "お問い合わせ内容は必須項目です";
+}
+if (mb_strlen($message) > 301) {
+  $_SESSION['flash']['message'] = "お問い合わせ内容は300文字以内で入力してください";
 }
 $_SESSION['original']['message'] = $message;
 
@@ -61,7 +70,7 @@ unset($_SESSION['csrfToken']);
 </head>
 <body>
   <h1>お問い合わせフォーム 完了</h1>
-  <p><?= $resMsg; ?></p>
+  <p><?php $resMsg; ?></p>
   <p><a href="index.php">お問い合わせフォームに戻る</a></p>
 </body>
 </html>
