@@ -2,17 +2,15 @@
 session_start();
 
 require_once('../libs/Request.php');
+require_once('../libs/Csrf.php');
 
 $method = new Request($_SERVER["REQUEST_METHOD"]);
 $method->redirectToIndex();
 
 $postToken = isset($_POST["csrfToken"]) && is_string($_POST["csrfToken"]) ? $_POST["csrfToken"] : '';
 $sessionToken = isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
-
-if ($postToken === "" || $sessionToken === "" || $postToken !== $sessionToken) {
-  header("Location: index.php");
-  exit;
-}
+$csrf = new Csrf($postToken, $sessionToken);
+$csrf->redirectToIndex();
 
 $name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : '';
 $email = isset($_POST["email"]) && is_string($_POST["email"]) ? filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL) : '';

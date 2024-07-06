@@ -1,12 +1,15 @@
 <?php
 session_start();
 
+require_once('../libs/Csrf.php');
+
 $flash = isset($_SESSION['flash']) ? $_SESSION['flash'] : [];
 unset($_SESSION['flash']);
 $original = isset($_SESSION['original']) ? $_SESSION['original'] : [];
 unset($_SESSION['original']);
 
-$csrfToken = bin2hex(random_bytes(16));
+$csrf = new Csrf();
+$csrfToken = $csrf->createToken();
 $_SESSION['csrfToken'] = $csrfToken;
 ?>
 
