@@ -2,11 +2,15 @@
 session_start();
 
 require_once('../libs/Csrf.php');
+require_once('../libs/Validation.php');
 
+$validation = new Validation();
+[$flash, $original] = $validation->setValidatedErrorPram();
+/*
 $flash = isset($_SESSION['flash']) ? $_SESSION['flash'] : [];
 unset($_SESSION['flash']);
 $original = isset($_SESSION['original']) ? $_SESSION['original'] : [];
-unset($_SESSION['original']);
+unset($_SESSION['original']);*/
 
 $csrf = new Csrf();
 $csrfToken = $csrf->createToken();
