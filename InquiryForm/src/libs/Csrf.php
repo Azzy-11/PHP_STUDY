@@ -1,29 +1,22 @@
 <?php
-class Csrf
+declare(strict_types=1);
+
+final class Csrf
 {
-  private ?string $postToken;
-  private ?string $sessionToken;
-
-  public function __construct(?string $postToken = null, ?string $sessionToken = null)
-  {
-    $this->postToken = $postToken;
-    $this->sessionToken = $sessionToken;
+  public static function setToken(): void {
+    $_SESSION['csrfToken'] = bin2hex(random_bytes(16));
   }
 
-  public function createToken() : string {
-    return bin2hex(random_bytes(16));
+  public static function getToken(): string {
+    return isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
   }
 
-  public function validateToken() :bool {
-    $postToken = $this->postToken;
-    $sessionToken = $this->sessionToken;
-    return $postToken !== "" && $sessionToken !== "" && $postToken === $sessionToken;
-  }
-
-  public function redirectToIndex() {
-    if (!$this->validateToken()) {
+  public static function validateToken(): void {
+    $postToken = isset($_POST["csrfToken"]) && is_string($_POST["csrfToken"]) ? $_POST["csrfToken"] : '';
+    $sessionToken = isset($_SESSION['csrfToken']) ? $_SESSION['csrfToken'] : '';
+    if ($postToken === "" || $sessionToken === "" || $postToken !== $sessionToken) {
       header("Location: index.php");
       exit;
-    }
+    } ;
   }
 }

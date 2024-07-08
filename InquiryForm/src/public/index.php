@@ -1,20 +1,14 @@
 <?php
+declare(strict_types=1);
+
 session_start();
 
 require_once('../libs/Csrf.php');
 require_once('../libs/Validation.php');
 
-$validation = new Validation();
-[$flash, $original] = $validation->setValidatedErrorPram();
-/*
-$flash = isset($_SESSION['flash']) ? $_SESSION['flash'] : [];
-unset($_SESSION['flash']);
-$original = isset($_SESSION['original']) ? $_SESSION['original'] : [];
-unset($_SESSION['original']);*/
+[$flash, $original] = Validation::setValidatedErrorParam();
 
-$csrf = new Csrf();
-$csrfToken = $csrf->createToken();
-$_SESSION['csrfToken'] = $csrfToken;
+Csrf::setToken();
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +33,7 @@ $_SESSION['csrfToken'] = $csrfToken;
     <textarea name="message" id="message" required><?php echo isset($original['message']) ? $original['message'] : ''  ?></textarea><br>
     <?php echo isset($flash['message']) ? $flash['message'] . '<br>' : ''; ?>
 
-    <input type="hidden" name="csrfToken" value="<?php echo $csrfToken; ?>">
+    <input type="hidden" name="csrfToken" value="<?php echo Csrf::getToken(); ?>">
     <button type="submit">送信</button>
   </form>
 </body>

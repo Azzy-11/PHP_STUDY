@@ -1,19 +1,16 @@
 <?php
-class Request
+declare(strict_types=1);
+
+final class Request
 {
   private const POST = "POST";
-  private string $method;
 
-  function __construct(string $requestMethod) {
-    $this->method = $requestMethod;
+  public static function isPost(): bool {
+    return $_SERVER["REQUEST_METHOD"] === self::POST;
   }
 
-  public function isPost() : bool {
-    return $this->method === self::POST;
-  }
-
-  public function redirectToIndex() {
-    if (!$this->isPost()) {
+  public static function redirectToIndexUnlessPost():void {
+    if (self::isPost()) {
       header("Location: index.php");
       exit;
     }
