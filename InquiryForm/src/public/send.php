@@ -6,6 +6,7 @@ session_start();
 require_once('../libs/Request.php');
 require_once('../libs/Csrf.php');
 require_once('../libs/Validation.php');
+require_once('../libs/dbConnect.php');
 
 Request::redirectToIndexUnlessPost();
 Csrf::validateToken();
@@ -16,6 +17,16 @@ $email = isset($_POST["email"]) && is_string($_POST["email"]) ? filter_var(trim(
 $message = isset($_POST["message"]) && is_string($_POST["message"]) ? $_POST["message"] : '';
 
 //PDO
+try {
+  $stmt = $db->prepare("INSERT INTO contacts (name, email, content) VALUES (:name, :email, :content)");
+  $stmt->bindValue(':name', $name);
+  $stmt->bindValue(':email', $email);
+  $stmt->bindValue(':content', $message);
+  $stmt->execute();
+  echo "データが正常に挿入されました";
+} catch (PDOException $e) {
+  echo "エラー：" . $e->getMessage();
+}
 
 unset($_SESSION['csrfToken']);
 ?>
