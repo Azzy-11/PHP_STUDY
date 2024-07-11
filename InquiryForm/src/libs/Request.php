@@ -10,7 +10,7 @@ final class Request
   }
 
   public static function redirectToIndexUnlessPost():void {
-    if (self::isPost()) {
+    if (!self::isPost()) {
       header("Location: index.php");
       exit;
     }

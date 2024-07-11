@@ -42,8 +42,8 @@ $message = isset($_POST["message"]) && is_string($_POST["message"]) ? $_POST["me
     <input type="hidden" name="name" value="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
     <input type="hidden" name="email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>">
     <input type="hidden" name="message" value="<?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="hidden" name="csrfToken" value="<?php echo htmlspecialchars($postToken, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="submit" value="送信">
+    <input type="hidden" name="csrfToken" value="<?php echo htmlspecialchars(Csrf::getToken(), ENT_QUOTES, 'UTF-8'); ?>">
+    <button type="submit">送信</button>
     <button type="button" onClick="history.back()">戻る</button>
   </form>
 </body>
