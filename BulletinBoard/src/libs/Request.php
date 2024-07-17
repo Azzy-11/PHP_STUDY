@@ -18,8 +18,15 @@ final class REQUEST
     return !isset($_SESSION['csrf']);
   }
 
-  public static function isBadRequest(): void {
+  public static function exceptGetAndPost(): void {
     if (!self::isGet() && !self::isPost()) {
+      header("Location: index.php");
+      exit;
+    }
+  }
+
+  public static function exceptPost(): void {
+    if (!self::isPost()) {
       header("Location: index.php");
       exit;
     }

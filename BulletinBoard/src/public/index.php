@@ -7,7 +7,7 @@ require_once('../libs/Csrf.php');
 require_once('../libs/Validation.php');
 require_once('../libs/dbConnect.php');
 
-Request::isBadRequest();
+Request::exceptGetAndPost();
 if (Request::isGet()) {
   Csrf::setToken();
   // READ
