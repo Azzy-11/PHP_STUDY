@@ -12,9 +12,9 @@ if (Request::isGet()) {
   Csrf::setToken();
   // READ
   try {
-    $stmt = $db->prepare("SELECT * FROM posts");
-    $stmt->execute();
-    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $read = $db->prepare("SELECT * FROM posts");
+    $read->execute();
+    $posts = $read->fetchAll(PDO::FETCH_ASSOC);
   } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
   }
@@ -25,9 +25,9 @@ if (Request::isPost()) {
 
     // READ
     try {
-      $stmt = $db->prepare("SELECT * FROM posts");
-      $stmt->execute();
-      $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $read = $db->prepare("SELECT * FROM posts");
+      $read->execute();
+      $posts = $read->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
       echo "エラー：" . $e->getMessage();
     }
@@ -41,19 +41,19 @@ if (Request::isPost()) {
 
     // CREATE
     try {
-      $stmt = $db->prepare("INSERT INTO posts (name, content) VALUE (:name, :content)");
-      $stmt->bindValue(':name', $name);
-      $stmt->bindValue(':content', $content);
-      $stmt->execute();
+      $create = $db->prepare("INSERT INTO posts (name, content) VALUE (:name, :content)");
+      $create->bindValue(':name', $name);
+      $create->bindValue(':content', $content);
+      $create->execute();
     } catch (PDOException $e) {
       echo "エラー：" . $e->getMessage();
     }
 
     // READ
     try {
-      $stmt = $db->prepare("SELECT * FROM posts");
-      $stmt->execute();
-      $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $read = $db->prepare("SELECT * FROM posts");
+      $read->execute();
+      $posts = $read->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
       echo "エラー：" . $e->getMessage();
     }
