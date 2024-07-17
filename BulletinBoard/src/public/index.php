@@ -82,7 +82,7 @@ if (Request::isPost()) {
 
   <div>
     <?php foreach ($posts as $post) {
-      $postId = htmlspecialchars($post['id'], ENT_QUOTES);
+      $postId = htmlspecialchars((string)$post['id'], ENT_QUOTES);
       $postName = htmlspecialchars($post['name'], ENT_QUOTES);
       $postContent = htmlspecialchars($post['content'], ENT_QUOTES);
       $postTime = htmlspecialchars($post['updated_at'], ENT_QUOTES);
@@ -92,7 +92,7 @@ if (Request::isPost()) {
         {$postContent} | {$postName} | {$postTime} | 
         <form action="delete.php" method="post" onsubmit="return confirm('本当に削除しますか？');">
           <input type="hidden" name="postId" value="{$postId}">
-          <input type="hidden" name="deleteCsrf" value="{Csrf::getToken()}">
+          <input type="hidden" name="csrf" value="{Csrf::getToken()}">
           <button type="submit">削除</button>
         </form>
       </p>
