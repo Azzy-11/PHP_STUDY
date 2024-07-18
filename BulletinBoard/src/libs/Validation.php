@@ -11,6 +11,11 @@ final class Validation
     self::validateName($name);
     self::validateContent($content);
 
+    if (self::hasErrors()) {
+      header("Location: index.php");
+      exit;
+    }
+
     return [
       $name,
       $content
@@ -35,6 +40,11 @@ final class Validation
       $_SESSION['flash']['content'] = "投稿内容を300文字以内で入力してください";
     }
     $_SESSION['original']['content'] = $content;
+  }
+
+  private static function hasErrors(): bool
+  {
+      return isset($_SESSION['flash']['name']) || isset($_SESSION['flash']['email']) || isset($_SESSION['flash']['message']);
   }
 
   public static function setValidatedErrorParam(): array {

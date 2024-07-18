@@ -8,56 +8,17 @@ require_once('../libs/Validation.php');
 require_once('../libs/dbConnect.php');
 
 Request::exceptGetAndPost();
-if (Request::isGet()) {
-  Csrf::setToken();
-  // READ
-  try {
-    $read = $db->prepare("SELECT * FROM posts WHERE deleted_at IS NULL");
-    $read->execute();
-    $posts = $read->fetchAll(PDO::FETCH_ASSOC);
-  } catch (PDOException $e) {
-    echo "エラー：" . $e->getMessage();
-  }
-} 
-if (Request::isPost()) {
-  if (Request::isFirstRequest()) {
-    Csrf::setToken();
+Csrf::setToken();
 
-    // READ
-    try {
-      $read = $db->prepare("SELECT * FROM posts WHERE deleted_at IS NULL");
-      $read->execute();
-      $posts = $read->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-      echo "エラー：" . $e->getMessage();
-    }
-  } else {
-    Csrf::validateToken();
-    
-    [$name, $content] = Validation::validation();
-    [$flash, $original] = Validation::setValidatedErrorParam();
+[$flash, $original] = Validation::setValidatedErrorParam();
 
-    Csrf::setToken();
-
-    // CREATE
-    try {
-      $create = $db->prepare("INSERT INTO posts (name, content) VALUE (:name, :content)");
-      $create->bindValue(':name', $name);
-      $create->bindValue(':content', $content);
-      $create->execute();
-    } catch (PDOException $e) {
-      echo "エラー：" . $e->getMessage();
-    }
-
-    // READ
-    try {
-      $read = $db->prepare("SELECT * FROM posts WHERE deleted_at IS NULL");
-      $read->execute();
-      $posts = $read->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-      echo "エラー：" . $e->getMessage();
-    }
-  }
+// READ
+try {
+  $read = $db->prepare("SELECT * FROM posts WHERE deleted_at IS NULL");
+  $read->execute();
+  $posts = $read->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+  echo "エラー：" . $e->getMessage();
 }
 ?>
 <!DOCTYPE html>
@@ -69,7 +30,7 @@ if (Request::isPost()) {
 </head>
 <body>
   <h1>掲示板</h1>
-  <form action="" method="post">
+  <form action="insert.php" method="post">
     <label for="text">投稿者名</label><br>
     <input type="text" name="name" id="name" value="<?php echo isset($original['name']) ? $original['name'] : ''; ?>"><br>
     <?php echo isset($flash['name']) ? '<p>' . $flash['name'] . '</p>' : '';; ?>
