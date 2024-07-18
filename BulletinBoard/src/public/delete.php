@@ -22,20 +22,31 @@ try {
   $post = $read->fetchAll(PDO::FETCH_ASSOC);
 
   if (empty($post)) {
-    echo "レコードが見つかりませんでした。";
-    // header("Location: index.php");
-    // exit;
+    unset($_SESSION['csrf']);
+    header("Location: index.php");
+    exit;
   } else {
     // DELETE
     try {
       $del = $db->prepare("UPDATE posts SET deleted_at = NOW() WHERE id = :id");
       $del->bindValue(':id', $postId, PDO::PARAM_INT);
       $del->execute();
-      echo "レコードが正常に更新されました。";
+      
+      unset($_SESSION['csrf']);
+      header("Location: index.php");
+      exit;
     } catch (PDOException $e) {
-      echo "エラー：" . $e->getMessage();
+      throw new Exception("Database Error: " . $e->getMessage());
+
+      unset($_SESSION['csrf']);
+      header("Location: index.php");
+      exit;
     }
   }
 } catch (PDOException $e) {
-  echo "エラー：" . $e->getMessage();
+  throw new Exception("Database Error: " . $e->getMessage());
+
+  unset($_SESSION['csrf']);
+  header("Location: index.php");
+  exit;
 }
