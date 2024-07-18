@@ -12,7 +12,7 @@ if (Request::isGet()) {
   Csrf::setToken();
   // READ
   try {
-    $read = $db->prepare("SELECT * FROM posts");
+    $read = $db->prepare("SELECT * FROM posts WHERE deleted_at IS NULL");
     $read->execute();
     $posts = $read->fetchAll(PDO::FETCH_ASSOC);
   } catch (PDOException $e) {
@@ -25,7 +25,7 @@ if (Request::isPost()) {
 
     // READ
     try {
-      $read = $db->prepare("SELECT * FROM posts");
+      $read = $db->prepare("SELECT * FROM posts WHERE deleted_at IS NULL");
       $read->execute();
       $posts = $read->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -51,7 +51,7 @@ if (Request::isPost()) {
 
     // READ
     try {
-      $read = $db->prepare("SELECT * FROM posts");
+      $read = $db->prepare("SELECT * FROM posts WHERE deleted_at IS NULL");
       $read->execute();
       $posts = $read->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -80,19 +80,21 @@ if (Request::isPost()) {
     <button type="submit">投稿</button>
   </form>
 
+  <hr>
   <div>
     <?php foreach ($posts as $post) {
       $postId = htmlspecialchars((string)$post['id'], ENT_QUOTES);
       $postName = htmlspecialchars($post['name'], ENT_QUOTES);
       $postContent = htmlspecialchars($post['content'], ENT_QUOTES);
       $postTime = htmlspecialchars($post['updated_at'], ENT_QUOTES);
+      $csrfToken = Csrf::getToken();
 
       echo <<<EOT
       <p>
         {$postContent} | {$postName} | {$postTime} | 
         <form action="delete.php" method="post" onsubmit="return confirm('本当に削除しますか？');">
           <input type="hidden" name="postId" value="{$postId}">
-          <input type="hidden" name="csrf" value="{Csrf::getToken()}">
+          <input type="hidden" name="csrf" value="{$csrfToken}">
           <button type="submit">削除</button>
         </form>
       </p>
