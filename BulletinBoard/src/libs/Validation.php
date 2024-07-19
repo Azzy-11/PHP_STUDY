@@ -13,7 +13,7 @@ final class Validation
 
     if (self::hasErrors()) {
       header("Location: index.php");
-      exit;
+      exit();
     }
 
     return [

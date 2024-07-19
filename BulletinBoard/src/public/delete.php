@@ -7,12 +7,12 @@ require_once('../libs/Csrf.php');
 require_once('../libs/dbConnect.php');
 
 Request::exceptPost();
-CSRF::validateToken();
+Csrf::validateToken();
 
-$postId = isset($_POST['postId']) && is_string($_POST['postId']) ? $_POST['postId'] : null;
+$postId = (isset($_POST['postId']) && is_string($_POST['postId'])) ? $_POST['postId'] : null;
 if (!$postId) {
   header("Location: index.php");
-  exit;
+  exit();
 }
 
 try {
@@ -21,32 +21,31 @@ try {
   $read->execute();
   $post = $read->fetchAll(PDO::FETCH_ASSOC);
 
-  if (empty($post)) {
-    unset($_SESSION['csrf']);
-    header("Location: index.php");
-    exit;
-  } else {
-    // DELETE
-    try {
-      $del = $db->prepare("UPDATE posts SET deleted_at = NOW() WHERE id = :id");
-      $del->bindValue(':id', $postId, PDO::PARAM_INT);
-      $del->execute();
-      
-      unset($_SESSION['csrf']);
-      header("Location: index.php");
-      exit;
-    } catch (PDOException $e) {
-      throw new Exception("Database Error: " . $e->getMessage());
+} catch (PDOException $e) {
+  throw new Exception("Database Error: " . $e->getMessage());
+  
+  unset($_SESSION['csrf']);
+  header("Location: index.php");
+  exit();
+}
 
-      unset($_SESSION['csrf']);
-      header("Location: index.php");
-      exit;
-    }
-  }
+if (empty($post)) {
+  unset($_SESSION['csrf']);
+  header("Location: index.php");
+  exit();
+}
+
+// DELETE
+try {
+  $del = $db->prepare("UPDATE posts SET deleted_at = NOW() WHERE id = :id");
+  $del->bindValue(':id', $postId, PDO::PARAM_INT);
+  $del->execute();
+
 } catch (PDOException $e) {
   throw new Exception("Database Error: " . $e->getMessage());
 
+} finally {
   unset($_SESSION['csrf']);
   header("Location: index.php");
-  exit;
+  exit();
 }

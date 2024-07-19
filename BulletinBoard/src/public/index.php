@@ -37,30 +37,30 @@ try {
     <label for="content">投稿内容</label><br>
     <textarea name="content" id="content"><?php echo isset($original['content']) ? $original['content'] : '';; ?></textarea><br>
     <?php echo isset($flash['content']) ? '<p>' . $flash['content'] . '</p>' : '';; ?>
-    <input type="hidden" name="csrf" value="<?php echo Csrf::getToken(); ?>">
+    <input type="hidden" name="csrf" value="<?php echo Csrf::getSessionToken(); ?>">
     <button type="submit">投稿</button>
   </form>
 
   <hr>
   <div>
-    <?php foreach ($posts as $post) {
+    <?php foreach ($posts as $post): ?>
+      <?php
       $postId = htmlspecialchars((string)$post['id'], ENT_QUOTES);
       $postName = htmlspecialchars($post['name'], ENT_QUOTES);
       $postContent = htmlspecialchars($post['content'], ENT_QUOTES);
       $postTime = htmlspecialchars($post['updated_at'], ENT_QUOTES);
-      $csrfToken = Csrf::getToken();
+      ?>
 
-      echo <<<EOT
       <p>
-        {$postContent} | {$postName} | {$postTime} | 
+        <?php echo $postContent; ?> | <?php echo $postName; ?> | <?php echo $postTime; ?> | 
         <form action="delete.php" method="post" onsubmit="return confirm('本当に削除しますか？');">
-          <input type="hidden" name="postId" value="{$postId}">
-          <input type="hidden" name="csrf" value="{$csrfToken}">
+          <input type="hidden" name="postId" value="<?php echo $postId; ?>">
+          <input type="hidden" name="csrf" value="<?php echo Csrf::getSessionToken(); ?>">
           <button type="submit">削除</button>
         </form>
       </p>
-      EOT;
-    } ?>
+
+    <?php endforeach; ?>
   </div>
   </form>
 </body>

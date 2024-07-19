@@ -21,14 +21,14 @@ final class REQUEST
   public static function exceptGetAndPost(): void {
     if (!self::isGet() && !self::isPost()) {
       header("Location: index.php");
-      exit;
+      exit();
     }
   }
 
   public static function exceptPost(): void {
     if (!self::isPost()) {
       header("Location: index.php");
-      exit;
+      exit();
     }
   }
 }

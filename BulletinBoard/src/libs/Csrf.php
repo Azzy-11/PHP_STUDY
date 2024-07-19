@@ -7,17 +7,21 @@ final class Csrf
     $_SESSION['csrf'] = bin2hex(random_bytes(16));
   }
 
-  public static function getToken(): string {
-    return isset($_SESSION['csrf']) && is_string($_SESSION['csrf']) ? $_SESSION['csrf'] : '';
+  public static function getPostToken() : string {
+    return (isset($_POST['csrf']) && is_string($_POST['csrf'])) ? $_POST['csrf'] : '';
+  }
+
+  public static function getSessionToken() : string {
+    return (isset($_SESSION['csrf']) && is_string($_SESSION['csrf'])) ? $_SESSION['csrf'] : '';
   }
 
   public static function validateToken(): void {
-    $postToken = isset($_POST['csrf']) && is_string($_POST['csrf']) ? $_POST['csrf'] : '';
-    $sessionToken = isset($_SESSION['csrf']) && is_string($_SESSION['csrf']) ? $_SESSION['csrf'] : '';
+    $postToken = self::getPostToken();
+    $sessionToken = self::getSessionToken();
 
     if ($postToken === '' || $sessionToken === '' || $postToken !== $sessionToken) {
       header("Location: index.php");
-      exit;
+      exit();
     }
   }
 
