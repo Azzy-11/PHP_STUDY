@@ -51,7 +51,9 @@ class Post {
     }
   }
 
-  public function deletePost(): void {
+  public function deletePost($post): void {
+    self::checkPost($post);
+
     try {
       $del = $this->db->prepare("UPDATE posts SET deleted_at = NOW() WHERE id = :id");
       $del->bindValue(':id', $this->id, PDO::PARAM_INT);
@@ -61,6 +63,14 @@ class Post {
       throw new Exception("Database Error: " . $e->getMessage());
     
     } finally {
+      unset($_SESSION['csrf']);
+      header("Location: index.php");
+      exit();
+    }
+  }
+
+  public function checkPost($post) :void {
+    if (empty($post) || count($post) > 1) {
       unset($_SESSION['csrf']);
       header("Location: index.php");
       exit();

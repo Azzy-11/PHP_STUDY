@@ -18,13 +18,5 @@ if (!$postId) {
 
 $delPost = new Post($db, (int)$postId, null, null);
 $post = $delPost->selectPost();
-
-
-if (empty($post) || count($post) > 1) {
-  unset($_SESSION['csrf']);
-  header("Location: index.php");
-  exit();
-}
-
-$delPost->deletePost();
+$delPost->deletePost($post);
 
