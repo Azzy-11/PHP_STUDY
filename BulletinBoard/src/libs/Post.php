@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once('Redirect.php');
+
 class Post {
   public function __construct(private PDO $db, private ?int $id = null, private ?string $name = null, private ?string $content = null)
   {
@@ -18,8 +20,7 @@ class Post {
       throw new Exception("Database Error: " . $e->getMessage());
 
     } finally {
-      header("Location: index.php");
-      exit;
+      Redirect::redirectToIndex();
     }
   }
   
@@ -46,8 +47,7 @@ class Post {
       throw new Exception("Database Error: " . $e->getMessage());
       
       unset($_SESSION['csrf']);
-      header("Location: index.php");
-      exit();
+      Redirect::redirectToIndex();
     }
   }
 
@@ -64,16 +64,14 @@ class Post {
     
     } finally {
       unset($_SESSION['csrf']);
-      header("Location: index.php");
-      exit();
+      Redirect::redirectToIndex();
     }
   }
 
   public function checkPost($post) :void {
     if (empty($post) || count($post) > 1) {
       unset($_SESSION['csrf']);
-      header("Location: index.php");
-      exit();
+      Redirect::redirectToIndex();
     }
   }
 }

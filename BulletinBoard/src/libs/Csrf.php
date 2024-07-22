@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once('Redirect.php');
+
 final class Csrf
 {
   public static function setToken(): void {
@@ -20,8 +22,7 @@ final class Csrf
     $sessionToken = self::getSessionToken();
 
     if ($postToken === '' || $sessionToken === '' || $postToken !== $sessionToken) {
-      header("Location: index.php");
-      exit();
+      Redirect::redirectToIndex();
     }
   }
 

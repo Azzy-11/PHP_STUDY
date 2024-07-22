@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once('Redirect.php');
+
 final class REQUEST
 {
   private const GET = "GET";
@@ -20,15 +22,13 @@ final class REQUEST
 
   public static function exceptGetAndPost(): void {
     if (!self::isGet() && !self::isPost()) {
-      header("Location: index.php");
-      exit();
+      Redirect::redirectToIndex();
     }
   }
 
   public static function exceptPost(): void {
     if (!self::isPost()) {
-      header("Location: index.php");
-      exit();
+      Redirect::redirectToIndex();
     }
   }
 }
