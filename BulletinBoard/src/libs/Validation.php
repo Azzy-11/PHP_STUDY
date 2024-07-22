@@ -1,19 +1,20 @@
 <?php
 declare(strict_types=1);
 
+require_once('Redirect.php');
+
 final class Validation
 {
 
   public static function validation() : array {
-    $name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : null;
-    $content = isset($_POST["content"]) && is_string($_POST["content"]) ? $_POST["content"] : null;
+    $name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : "";
+    $content = isset($_POST["content"]) && is_string($_POST["content"]) ? $_POST["content"] : "";
 
     self::validateName($name);
     self::validateContent($content);
 
     if (self::hasErrors()) {
-      header("Location: index.php");
-      exit();
+      Redirect::redirectToIndex();
     }
 
     return [
@@ -23,7 +24,7 @@ final class Validation
   }
 
   public static function validateName($name): void {
-    if ($name === null) {
+    if ($name === "") {
       $_SESSION['flash']['name'] = "投稿者名を入力してください";
     }
     if (mb_strlen($name) > 17) {
@@ -33,7 +34,7 @@ final class Validation
   }
 
   public static function validateContent($content): void {
-    if ($content === null) {
+    if ($content === "") {
       $_SESSION['flash']['content'] = "投稿内容を入力してください";
     }
     if (mb_strlen($content) > 301) {
@@ -44,7 +45,7 @@ final class Validation
 
   private static function hasErrors(): bool
   {
-      return isset($_SESSION['flash']['name']) || isset($_SESSION['flash']['email']) || isset($_SESSION['flash']['message']);
+      return isset($_SESSION['flash']['name']) || isset($_SESSION['flash']['content']) || isset($_SESSION['flash']['message']);
   }
 
   public static function setValidatedErrorParam(): array {
