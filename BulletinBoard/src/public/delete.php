@@ -5,6 +5,7 @@ session_start();
 require_once('../libs/Request.php');
 require_once('../libs/Csrf.php');
 require_once('../libs/dbConnect.php');
+require_once('../libs/Post.php');
 
 Request::exceptPost();
 Csrf::validateToken();
@@ -15,37 +16,15 @@ if (!$postId) {
   exit();
 }
 
-try {
-  $read = $db->prepare("SELECT * FROM posts WHERE id = :id AND deleted_at IS NULL");
-  $read->bindValue(':id', $postId, PDO::PARAM_INT);
-  $read->execute();
-  $post = $read->fetchAll(PDO::FETCH_ASSOC);
+$delPost = new Post($db, (int)$postId, null, null);
+$post = $delPost->selectPost();
 
-} catch (PDOException $e) {
-  throw new Exception("Database Error: " . $e->getMessage());
-  
+
+if (empty($post) || count($post) > 1) {
   unset($_SESSION['csrf']);
   header("Location: index.php");
   exit();
 }
 
-if (empty($post)) {
-  unset($_SESSION['csrf']);
-  header("Location: index.php");
-  exit();
-}
+$delPost->deletePost();
 
-// DELETE
-try {
-  $del = $db->prepare("UPDATE posts SET deleted_at = NOW() WHERE id = :id");
-  $del->bindValue(':id', $postId, PDO::PARAM_INT);
-  $del->execute();
-
-} catch (PDOException $e) {
-  throw new Exception("Database Error: " . $e->getMessage());
-
-} finally {
-  unset($_SESSION['csrf']);
-  header("Location: index.php");
-  exit();
-}

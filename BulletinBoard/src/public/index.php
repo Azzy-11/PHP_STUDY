@@ -6,20 +6,16 @@ require_once('../libs/Request.php');
 require_once('../libs/Csrf.php');
 require_once('../libs/Validation.php');
 require_once('../libs/dbConnect.php');
+require_once('../libs/Post.php');
 
 Request::exceptGetAndPost();
 Csrf::setToken();
 
 [$flash, $original] = Validation::setValidatedErrorParam();
 
-// READ
-try {
-  $read = $db->prepare("SELECT * FROM posts WHERE deleted_at IS NULL");
-  $read->execute();
-  $posts = $read->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-  echo "エラー：" . $e->getMessage();
-}
+$readPost = new Post($db, null, null, null);
+$posts =$readPost->findPost();
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
