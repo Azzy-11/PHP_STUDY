@@ -1,0 +1,49 @@
+@startuml Library
+
+!define MAIN_ENTITY #E2EFDA-C6E0B4
+!define MASTER_MARK_COLOR AAFFAA
+!define TRANSACTION_MARK_COLOR FFAA00
+
+entity users <<主,TRANSACTION_MARK_COLOR>> MAIN_ENTITY {
+  +id [PK]
+  --
+  authkey
+  password
+  firstName
+  surName 
+  email
+  created_at
+  updated_at
+  deleted_at
+}
+
+entity books <<主,TRANSACTION_MARK_COLOR>> MAIN_ENTITY {
+  + id [PK]
+  + callNo [PK]
+  --
+  authKey
+  bookTitle
+  # uset_id [FK]
+  borrowed_at
+  created_at
+  updated_at
+  deleted_at
+}
+
+entity histories <<T,TRANSACTION_MARK_COLOR>>{
+  + id [PK]
+  --
+  authKey
+  # user_id [FK]
+  user_name
+  # books_callNo [FK]
+  books_title
+  created_at
+  updated_at
+}
+
+users -d-o{ histories
+books -o{ histories
+books -o| users
+
+@enduml
