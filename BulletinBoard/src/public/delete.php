@@ -16,7 +16,6 @@ if (!$postId) {
   exit();
 }
 
-$delPost = new Post($db, (int)$postId, null, null);
-$post = $delPost->selectPost();
-$delPost->deletePost($post);
+$delPost = new Post($db);
+$delPost->delete((int)$postId);
 

@@ -5,19 +5,23 @@ require_once('Redirect.php');
 
 final class Csrf
 {
-  public static function setToken(): void {
+  public static function setToken(): void
+  {
     $_SESSION['csrf'] = bin2hex(random_bytes(16));
   }
 
-  public static function getPostToken() : string {
+  public static function getPostToken() : string
+  {
     return (isset($_POST['csrf']) && is_string($_POST['csrf'])) ? $_POST['csrf'] : '';
   }
 
-  public static function getSessionToken() : string {
+  public static function getSessionToken() : string
+  {
     return (isset($_SESSION['csrf']) && is_string($_SESSION['csrf'])) ? $_SESSION['csrf'] : '';
   }
 
-  public static function validateToken(): void {
+  public static function validateToken(): void
+  {
     $postToken = self::getPostToken();
     $sessionToken = self::getSessionToken();
 

@@ -13,5 +13,5 @@ Csrf::validateToken();
 
 [$name, $content] = Validation::validation();
 
-$createPost = new Post($db, null, $name, $content);
-$createPost->insertPost();
+$createPost = new Post($db);
+$createPost->insert($name, $content);

@@ -13,8 +13,8 @@ Csrf::setToken();
 
 [$flash, $original] = Validation::setValidatedErrorParam();
 
-$readPost = new Post($db, null, null, null);
-$posts =$readPost->findPost();
+$readPost = new Post($db);
+$posts =$readPost->find();
 
 ?>
 <!DOCTYPE html>

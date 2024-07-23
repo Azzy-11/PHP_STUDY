@@ -6,7 +6,8 @@ require_once('Redirect.php');
 final class Validation
 {
 
-  public static function validation() : array {
+  public static function validation() : array
+  {
     $name = isset($_POST["name"]) && is_string($_POST["name"]) ? $_POST["name"] : "";
     $content = isset($_POST["content"]) && is_string($_POST["content"]) ? $_POST["content"] : "";
 
@@ -23,7 +24,8 @@ final class Validation
     ];
   }
 
-  public static function validateName($name): void {
+  public static function validateName($name): void
+  {
     if ($name === "") {
       $_SESSION['flash']['name'] = "投稿者名を入力してください";
     }
@@ -33,7 +35,8 @@ final class Validation
     $_SESSION['original']['name'] = $name;
   }
 
-  public static function validateContent($content): void {
+  public static function validateContent($content): void
+  {
     if ($content === "") {
       $_SESSION['flash']['content'] = "投稿内容を入力してください";
     }
@@ -48,7 +51,8 @@ final class Validation
       return isset($_SESSION['flash']['name']) || isset($_SESSION['flash']['content']) || isset($_SESSION['flash']['message']);
   }
 
-  public static function setValidatedErrorParam(): array {
+  public static function setValidatedErrorParam(): array
+  {
     $flash = isset($_SESSION['flash']) ? $_SESSION['flash'] : null;
     $original = isset($_SESSION['original']) ? $_SESSION['original'] : null;
     unset($_SESSION['flash'], $_SESSION['original']);
