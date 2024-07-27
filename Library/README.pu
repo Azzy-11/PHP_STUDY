@@ -4,42 +4,49 @@
 !define MASTER_MARK_COLOR AAFFAA
 !define TRANSACTION_MARK_COLOR FFAA00
 
+skinparam linetype ortho
+
+legend top
+  dot : NOT NULL at table
+  hollow : NOT NULL at validation
+  sharp : FK
+end legend
+
 entity users <<主,TRANSACTION_MARK_COLOR>> MAIN_ENTITY {
-  +id [PK]
+  * id (PK) : INT  
   --
-  authkey
-  password
-  firstName
-  surName 
-  email
-  created_at
-  updated_at
-  deleted_at
+  + authkey : CHAR(16) 
+  + password : VARCHAR(255)
+  + firstName : CHAR(30)
+  + surName : CHAR(30)
+  + email : VARCHAR(255)
+  * created_at : DATE
+  * updated_at : DATE
+  deleted_at : DATE
 }
 
 entity books <<主,TRANSACTION_MARK_COLOR>> MAIN_ENTITY {
-  + id [PK]
-  + callNo [PK]
+  * id (PK) : INT
+  * callNo : CHAR(8)
   --
-  authKey
-  bookTitle
-  # uset_id [FK]
-  borrowed_at
-  created_at
-  updated_at
-  deleted_at
+  + authKey : CHAR(16)
+  + bookTitle : VARCHAR(64)
+  # uset_id (FK) : INT
+  borrowed_at : DATE
+  * created_at : DATE
+  * updated_at : DATE
+  deleted_at : DATE
 }
 
 entity histories <<T,TRANSACTION_MARK_COLOR>>{
-  + id [PK]
+  * id (PK) : INT
   --
-  authKey
-  # user_id [FK]
-  user_name
-  # books_callNo [FK]
-  books_title
-  created_at
-  updated_at
+  + authKey : CHAR(16)
+  # user_id (FK) : INT
+  # books_callNo (FK) : CHAR(8)
+  # books_title (FK) : VARCHAR(64)
+  * created_at : DATE
+  * updated_at : DATE
 }
 
 users -d-o{ histories
