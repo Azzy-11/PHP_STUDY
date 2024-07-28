@@ -14,7 +14,7 @@ $_SESSION['csrf'] = bin2hex(random_bytes(16));
 </head>
 <body>
   <h1>新規登録</h1>
-  <form action="" method="post">
+  <form action="comfirm.php" method="post">
     <label for="name">氏名</label><br>
       <label for="surName">　姓</label>
       <input type="text" name="surName" id="surName">
