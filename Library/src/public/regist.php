@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+session_start();
+
+$_SESSION['csrf'] = bin2hex(random_bytes(16));
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +26,7 @@
     <input type="password" name="password" id="password"><br>
     <label for="confirm_password">パスワードの確認</label><br>
     <input type="password" name="confirm_password" id="confirm_password"><br>
-    <input type="hidden" name="csrfToken" value=""><br>
+    <input type="hidden" name="csrfToken" value="<?php echo $_SESSION['csrf']; ?>"><br>
     <button type="submit">確認</button>
   </form>
 </body>
