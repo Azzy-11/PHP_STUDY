@@ -15,6 +15,6 @@
     <input type="password" name="loginPw">
     <button type="submit">ログイン</button>
   </form>
-  <a href="">新規登録はこちらから</a>
+  <a href="regist.php">新規登録はこちらから</a>
 </body>
 </html>
