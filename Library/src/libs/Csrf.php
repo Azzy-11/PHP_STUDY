@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-final final class Csrf
+final class Csrf
 {
   public static function setToken() : void {
     $_SESSION['csrf'] = bin2hex(random_bytes(16));
