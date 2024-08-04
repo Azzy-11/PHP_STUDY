@@ -2,12 +2,10 @@
 declare(strict_types=1);
 session_start();
 
+require_once('../libs/Request.php');
 require_once('../libs/Csrf.php');
 
-if ($_SERVER['REQUEST_METHOD'] !== "POST") {
-  header("Location: regist.php");
-  exit();
-}
+Request::exceptPost();
 
 Csrf::checkToken();
 
