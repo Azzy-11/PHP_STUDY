@@ -2,17 +2,14 @@
 declare(strict_types=1);
 session_start();
 
+require_once('../libs/Csrf.php');
+
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
   header("Location: regist.php");
   exit();
 }
 
-$postToken = (isset($_POST['csrfToken']) && is_string($_POST['csrfToken'])) ? $_POST['csrfToken'] : "";
-$sessionToken = (isset($_SESSION['csrf']) && is_string($_SESSION['csrf'])) ? $_SESSION['csrf'] : "";
-if ($postToken === "" || $sessionToken === "" || $postToken !== $sessionToken) {
-  header("Location: regist.php");
-  exit();
-}
+Csrf::checkToken();
 
 $name = (isset($_POST['name']) && is_string($_POST['name'])) ? $_POST['name'] : "";
 $email = (isset($_POST['email']) && is_string($_POST['email'])) ? $_POST['email'] : "";

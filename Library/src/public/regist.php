@@ -2,7 +2,9 @@
 declare(strict_types=1);
 session_start();
 
-$_SESSION['csrf'] = bin2hex(random_bytes(16));
+require_once('../libs/Csrf.php');
+
+Csrf::setToken();
 $original = isset($_SESSION['original']) ? $_SESSION['original'] : null;
 $flash = isset($_SESSION['flash']) ? $_SESSION['flash'] : null;
 
