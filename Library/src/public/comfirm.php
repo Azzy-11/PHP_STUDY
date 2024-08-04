@@ -31,7 +31,7 @@ if ($email === "") {
   $_SESSION['flash']['email'] = "メールアドレスを入力してください";
 }
 // $emailReg = "^[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*@([a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]\.)+[a-zA-Z]{2,}$";
-$emailReg = "/^(?=.{1,255}$)[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*@([a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]\.)+[a-zA-Z]{2,}$/";
+$emailReg = "/^(?=.{1,255}$)(?=.{1,64}@)[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/";
 if (preg_match($emailReg, $email) === 0) {
   $_SESSION['flash']['email'] = "メールアドレスを正しく入力してください";
 }
@@ -51,12 +51,8 @@ if ($rePassword === "" || $password !== $rePassword) {
 }
 
 if (isset($_SESSION['flash']['name']) || isset($_SESSION['flash']['email']) || isset($_SESSION['flash']['password']) || isset($_SESSION['flash']['re:password'])) {
-  // header("Location: regist.php");
-  // exit();
-  echo $_SESSION['flash']['name'];
-  echo $_SESSION['flash']['email'];
-  echo $_SESSION['flash']['password'];
-  echo $_SESSION['flash']['re:password'];
+  header("Location: regist.php");
+  exit();
 }
 ?>
 <!DOCTYPE html>
