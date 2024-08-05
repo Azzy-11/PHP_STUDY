@@ -3,12 +3,10 @@ declare(strict_types=1);
 session_start();
 
 require_once('../libs/Csrf.php');
+require_once('../libs/Validation.php');
 
 Csrf::setToken();
-$original = isset($_SESSION['original']) ? $_SESSION['original'] : null;
-$flash = isset($_SESSION['flash']) ? $_SESSION['flash'] : null;
-
-unset($_SESSION['flash'], $_SESSION['original']);
+[$flash, $original] = Validation::setErrorParam();
 
 ?>
 <!DOCTYPE html>

@@ -4,51 +4,12 @@ session_start();
 
 require_once('../libs/Request.php');
 require_once('../libs/Csrf.php');
+require_once('../libs/Validation.php');
 
 Request::exceptPost();
 
 Csrf::checkToken();
-
-$name = (isset($_POST['name']) && is_string($_POST['name'])) ? $_POST['name'] : "";
-$email = (isset($_POST['email']) && is_string($_POST['email'])) ? $_POST['email'] : "";
-$password = (isset($_POST['password']) && is_string($_POST['password'])) ? $_POST['password'] : "";
-$rePassword = (isset($_POST['re:password']) && is_string($_POST['re:password'])) ? $_POST['re:password'] : "";
-
-if ($name === "") {
-  $_SESSION['flash']['name'] = "名前を入力してください";
-}
-if (mb_strlen($name) > 65) {
-  $_SESSION['flash']['name'] = "名前を64文字以下で入力してください";
-}
-$_SESSION['original']['name'] = $name;
-
-if ($email === "") {
-  $_SESSION['flash']['email'] = "メールアドレスを入力してください";
-}
-// $emailReg = "^[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9_\-]+)*@([a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]\.)+[a-zA-Z]{2,}$";
-$emailReg = "/^(?=.{1,255}$)(?=.{1,64}@)[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/";
-if (preg_match($emailReg, $email) === 0) {
-  $_SESSION['flash']['email'] = "メールアドレスを正しく入力してください";
-}
-$_SESSION['original']['email'] = $email;
-
-if ($password === "") {
-  $_SESSION['flash']['password'] = "パスワードを入力してください";
-}
-$passwordReg = "/^[a-zA-Z0-9.?\/\-!@]{8,24}$/";
-if (preg_match($passwordReg, $password) === 0) {
-  $_SESSION['flash']['password'] = "パスワードを正しく入力してください";
-}
-$_SESSION['original']['password'] = $password;
-
-if ($rePassword === "" || $password !== $rePassword) {
-  $_SESSION['flash']['re:password'] = "パスワードが一致しません";
-}
-
-if (isset($_SESSION['flash']['name']) || isset($_SESSION['flash']['email']) || isset($_SESSION['flash']['password']) || isset($_SESSION['flash']['re:password'])) {
-  header("Location: regist.php");
-  exit();
-}
+[$name, $email, $password] = Validation::checkValidation();
 ?>
 <!DOCTYPE html>
 <html lang="en">
