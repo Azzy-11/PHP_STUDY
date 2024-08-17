@@ -2,14 +2,10 @@
 declare(strict_types=1);
 session_start();
 
-require_once('../libs/Request.php');
-require_once('../libs/Csrf.php');
-require_once('../libs/Validation.php');
+$name = (isset($_SESSION['formData']['name']) && is_string($_SESSION['formData']['name'])) ? $_SESSION['formData']['name'] : "";
+$email = (isset($_SESSION['formData']['email']) && is_string($_SESSION['formData']['email'])) ? $_SESSION['formData']['email'] : "";
+$password = (isset($_SESSION['formData']['password']) && is_string($_SESSION['formData']['password'])) ? $_SESSION['formData']['password'] : "";
 
-Request::exceptPost();
-
-Csrf::checkToken();
-[$name, $email, $password] = Validation::checkValidation();
 ?>
 <!DOCTYPE html>
 <html lang="en">

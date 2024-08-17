@@ -18,7 +18,7 @@ Csrf::setToken();
 </head>
 <body>
   <h1>新規登録</h1>
-  <form action="comfirm.php" method="post">
+  <form action="index.php" method="post">
     <label for="name">名前</label><br>
     <input type="text" name="name" id="name" value="<?php echo isset($original['name']) ? htmlspecialchars($original['name'], ENT_QUOTES, 'UTF-8') : ''; ?>"><br>
     <?php echo isset($flash['name']) ? htmlspecialchars($flash['name'], ENT_QUOTES, 'UTF-8') . '<br>' : ''; ?>
@@ -31,7 +31,8 @@ Csrf::setToken();
     <label for="re:password">パスワードの確認</label><br>
     <input type="password" name="re:password" id="re:password"><br>
     <?php echo isset($flash['re:password']) ? htmlspecialchars($flash['re:password'], ENT_QUOTES, 'UTF-8') . '<br>' : ''; ?>
-    <input type="hidden" name="csrfToken" value="<?php echo $_SESSION['csrf']; ?>"><br>
+    <input type="hidden" name="csrfToken" value="<?php echo $_SESSION['csrf']; ?>">
+    <input type="hidden" name="type" value="101">
     <button type="submit">確認</button>
   </form>
 </body>

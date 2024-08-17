@@ -13,7 +13,7 @@ final class Validation
   private const regEmail = "/^(?=.{1,255}$)(?=.{1,64}@)[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/";
   private const regPassword = "/^[a-zA-Z0-9.?\/\-!@]{8,24}$/";
 
-  public static function checkValidation() : array {
+  public static function checkRegisterValidation() : void {
     $name = self::getName();
     $email = self::getEmail();
     $password = self::getPassword();
@@ -26,11 +26,9 @@ final class Validation
       exit();
     }
 
-    return [
-      $name,
-      $email,
-      $password
-    ];
+    $_SESSION['formData']['name'] = $name;
+    $_SESSION['formData']['email'] = $email;
+    $_SESSION['formData']['password'] = $password;
   }
 
   public static function validate($name, $reg, $element, $flash) : void {
