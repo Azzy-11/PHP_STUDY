@@ -28,7 +28,7 @@ switch ($type) {
     break;
   
   default:
-    # code...
-    break;
+    header("Location: login.php");
+    exit();
 }
 ?>
