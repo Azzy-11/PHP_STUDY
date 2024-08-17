@@ -14,6 +14,12 @@ switch ($type) {
     Validation::checkRegisterValidation();
     header("Location: comfirm.php");
     exit();
+
+  case "102":
+    Request::exceptPost();
+    Csrf::checkToken();
+    header("Location: login.php");
+    exit();
   
   default:
     # code...

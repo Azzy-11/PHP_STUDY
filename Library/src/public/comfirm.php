@@ -30,5 +30,11 @@ $password = (isset($_SESSION['formData']['password']) && is_string($_SESSION['fo
       <td><?php echo str_repeat('*', strlen($password)); ?></td>
     </tr>
   </table>
+  <form action="index.php" method="post">
+    <input type="hidden" name="csrfToken" value="<?php echo isset($_SESSION['csrf']) ? htmlspecialchars($_SESSION['csrf'], ENT_QUOTES, 'UTF-8') : ''; ?>">
+    <input type="hidden" name="type" value="102">
+    <button type="button" onClick="history.back()">戻る</button>
+    <button type="submit">登録</button>
+  </form>
 </body>
 </html>
