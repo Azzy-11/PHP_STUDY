@@ -13,18 +13,22 @@ switch ($type) {
   case "101":
     Request::exceptPost();
     Csrf::checkToken();
-    Validation::checkRegisterValidation();
+    [$name, $email, $password, $rePassword] = Validation::checkRegisterValidation();
+    $_SESSION['formData']['name'] = $name;
+    $_SESSION['formData']['email'] = $email;
+    $_SESSION['formData']['password'] = $password;
+    $_SESSION['formData']['re:password'] = $rePassword;
+
     header("Location: comfirm.php");
     exit();
 
   case "102":
     Request::exceptPost();
     Csrf::checkToken();
-    $name = (isset($_SESSION['formData']['name']) && is_string($_SESSION['formData']['name'])) ? $_SESSION['formData']['name'] : "";
-    $email = (isset($_SESSION['formData']['email']) && is_string($_SESSION['formData']['email'])) ? $_SESSION['formData']['email'] : "";
-    $password = (isset($_SESSION['formData']['password']) && is_string($_SESSION['formData']['password'])) ? password_hash($_SESSION['formData']['password'], PASSWORD_DEFAULT) : "";
+    [$name, $email, $password, $rePassword] = Validation::checkRegisterValidation();
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $createUser = new User($db);
-    $createUser->insert($name, $email, $password);
+    $createUser->insert($name, $email, $hashedPassword);
     break;
   
   default:
