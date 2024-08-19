@@ -17,7 +17,7 @@ Csrf::setToken();
   <form action="index.php" method="post">
     <label for="loginId">メールアドレス</label>
     <input type="email" name="loginId">
-    <label for="loginPw">パスワード/label>
+    <label for="loginPw">パスワード</label>
     <input type="password" name="loginPw">
     <input type="hidden" name="csrfToken" value="<?php echo $_SESSION['csrf']; ?>">
     <input type="hidden" name="type" value="201">

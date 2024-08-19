@@ -30,6 +30,38 @@ switch ($type) {
     $createUser = new User($db);
     $createUser->insert($name, $email, $hashedPassword);
     break;
+
+  case "201":
+    Request::exceptPost();
+    Csrf::checkToken();
+    $loginId = (isset($_POST['loginId']) && is_string($_POST['loginId'])) ? $_POST['loginId'] : "";
+    $loginPw = (isset($_POST['loginPw']) && is_string($_POST['loginPw'])) ? $_POST['loginPw'] : "";
+
+    try {
+      $read = $db->prepare("SELECT id, password, name, admin FROM users WHERE email = :loginId AND deleted_at IS NULL");
+      $read->bindValue(':loginId', $loginId, PDO::PARAM_STR);
+      $read->execute();
+      $user = $read->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      throw new Exception("Database Error: " . $e->getMessage());
+    }
+    if (empty($user) || count($user) > 1) {
+      header("Location: login.php");
+      exit();
+    }
+    $userPw = $user[0]["password"];
+    if (password_verify($loginPw, $userPw)) {
+      $_SESSION['user'] = [
+        "id" => $user[0]["id"],
+        "name" => $user[0]["name"],
+        "email" => $loginId,
+        "admin" => $user[0]["admin"]
+      ];
+    } else {
+      header("Location: login.php");
+      exit();
+    }
+    break;
   
   default:
     header("Location: login.php");
