@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once('Redirect.php');
+
 final class Validation
 {
   private const name = 'name';
@@ -23,8 +25,7 @@ final class Validation
     self::validate(self::email, self::regEmail, $email, self::jaEmail);
     self::validatePassword();
     if (self::hasError()) {
-      header("Location: regist.php");
-      exit();
+      Redirect::redirectTo("regist");
     }
 
     return [

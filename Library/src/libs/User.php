@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once('Redirect.php');
+
 class User {
   public function __construct(private PDO $db, private ?int $id = null)
   {
@@ -18,8 +20,7 @@ class User {
     } catch (PDOException $e) {
       throw new Exception("Database Error: " . $e->getMessage());
     } finally {
-      header("Location: login.php");
-      exit();
+      Redirect::redirectTo("login");
     }
   }
 }

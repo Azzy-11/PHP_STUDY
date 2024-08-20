@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once('Redirect.php');
+
 final class Csrf
 {
   public static function setToken() : void {
@@ -28,8 +30,7 @@ final class Csrf
   public static function checkToken() : void {
     if (self::isValid() === false) {
       // 403へ
-      header("Location: regist.php");
-      exit();
+      Redirect::redirectTo("login.php");
     }
   }
 }
