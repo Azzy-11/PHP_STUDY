@@ -23,6 +23,7 @@ switch ($type) {
       're:password' => $rePassword,
     ];
     Redirect::redirectTo("comfirm");
+    break;
 
   case "102":
     [$name, $email, $password, $rePassword] = Validation::checkRegisterValidation();
@@ -38,5 +39,6 @@ switch ($type) {
   
   default:
     Redirect::redirectTo("login");
+    break;
 }
 ?>
