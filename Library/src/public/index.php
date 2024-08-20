@@ -8,23 +8,21 @@ require_once('../libs/Validation.php');
 require_once('../libs/dbConnect.php');
 require_once('../libs/User.php');
 
+Request::exceptPost();
+Csrf::checkToken();
 $type = (isset($_POST['type']) && is_string($_POST['type'])) ? $_POST['type'] : "";
+
 switch ($type) {
   case "101":
-    Request::exceptPost();
-    Csrf::checkToken();
     [$name, $email, $password, $rePassword] = Validation::checkRegisterValidation();
     $_SESSION['formData']['name'] = $name;
     $_SESSION['formData']['email'] = $email;
     $_SESSION['formData']['password'] = $password;
     $_SESSION['formData']['re:password'] = $rePassword;
-
     header("Location: comfirm.php");
     exit();
 
   case "102":
-    Request::exceptPost();
-    Csrf::checkToken();
     [$name, $email, $password, $rePassword] = Validation::checkRegisterValidation();
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $createUser = new User($db);
@@ -32,8 +30,6 @@ switch ($type) {
     break;
 
   case "201":
-    Request::exceptPost();
-    Csrf::checkToken();
     $loginId = (isset($_POST['loginId']) && is_string($_POST['loginId'])) ? $_POST['loginId'] : "";
     $loginPw = (isset($_POST['loginPw']) && is_string($_POST['loginPw'])) ? $_POST['loginPw'] : "";
 
