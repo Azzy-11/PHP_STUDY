@@ -44,8 +44,7 @@ class Auth
 
   public static function checkAuth() : void {
     if (self::isLoggedIn() === false) {
-      session_destroy();
-      Redirect::redirectTo("login");
+      self::logout();
     }
   }
   
@@ -60,8 +59,21 @@ class Auth
   public static function getLoginStatus() : int {
     return (isset($_SESSION['user']['status']) && is_int($_SESSION['user']['status'])) ? $_SESSION['user']['status'] : 0;
   }
-
+  
   public static function isLoggedIn() : bool {
     return self::getLoginStatus() === 1;
+  }
+  
+  public static function logout() : void {
+    $_SESSION = array();
+    if (ini_get("session.use_cookies")) {
+      $params = session_get_cookie_params();
+      setcookie(session_name(), '', time() - 42000,
+          $params["path"], $params["domain"],
+          $params["secure"], $params["httponly"]
+      );
+    }
+    session_destroy();
+    Redirect::redirectTo("login");
   }
 }

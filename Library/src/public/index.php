@@ -36,6 +36,10 @@ switch ($type) {
     $user = new Auth($db);
     $user->checkCredentials();
     break;
+
+  case "202":
+    Auth::logout();
+    break;
   
   default:
     Redirect::redirectTo("login");
