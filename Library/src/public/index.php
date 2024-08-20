@@ -48,11 +48,15 @@ switch ($type) {
     $userPw = $user[0]["password"];
     if (password_verify($loginPw, $userPw)) {
       $_SESSION['user'] = [
+        "status" => 1,
         "id" => $user[0]["id"],
         "name" => $user[0]["name"],
         "email" => $loginId,
         "admin" => $user[0]["admin"]
       ];
+      session_regenerate_id(true);
+      header("Location: top.php");
+      exit();
     } else {
       header("Location: login.php");
       exit();
