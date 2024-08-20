@@ -42,11 +42,26 @@ class Auth
     }
   }
 
+  public static function checkAuth() : void {
+    if (self::isLoggedIn() === false) {
+      session_destroy();
+      Redirect::redirectTo("login");
+    }
+  }
+  
   public function getLoginId() : string {
     return (isset($_POST['loginId']) && is_string($_POST['loginId'])) ? $_POST['loginId'] : "";
   }
-
+  
   public function getLoginPw() : string {
     return (isset($_POST['loginPw']) && is_string($_POST['loginPw'])) ? $_POST['loginPw'] : "";
+  }
+  
+  public static function getLoginStatus() : int {
+    return (isset($_SESSION['user']['status']) && is_int($_SESSION['user']['status'])) ? $_SESSION['user']['status'] : 0;
+  }
+
+  public static function isLoggedIn() : bool {
+    return self::getLoginStatus() === 1;
   }
 }
