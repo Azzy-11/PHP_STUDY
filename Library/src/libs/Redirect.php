@@ -6,6 +6,8 @@ final class Redirect
   private const LOGIN = "login";
   private const REGIST = "regist";
   private const COMFIRM = "comfirm";
+  private const ADMIN_REGIST = "adminRegist";
+  private const ADMIN_COMFIRM = "adminComfirm";
   private const TOP = "top";
 
   public static function redirectTo(string $location) : void {
@@ -24,6 +26,12 @@ final class Redirect
 
       case self::COMFIRM:
         return "comfirm.php";
+
+      case self::ADMIN_REGIST:
+        return "admin/regist.php";
+
+      case self::ADMIN_COMFIRM:
+        return "admin/comfirm.php";
 
       case self::TOP:
         return "top.php";

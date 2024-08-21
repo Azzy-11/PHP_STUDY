@@ -32,6 +32,24 @@ switch ($type) {
     $createUser->insert($name, $email, $hashedPassword);
     break;
 
+  case "103":
+    [$name, $email, $password, $rePassword] = Validation::checkRegisterValidation();
+    $_SESSION['formData'] = [
+      'name' => $name,
+      'email' => $email,
+      'password' => $password,
+      're:password' => $rePassword,
+    ];
+    Redirect::redirectTo("adminComfirm");
+    break;
+
+  case "104":
+    [$name, $email, $password, $rePassword] = Validation::checkRegisterValidation();
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $createUser = new User($db);
+    $createUser->insert($name, $email, $hashedPassword, true);
+    break;
+
   case "201":
     $user = new Auth($db);
     $user->checkCredentials();
