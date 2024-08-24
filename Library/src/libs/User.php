@@ -8,13 +8,13 @@ class User {
   {
   }
 
-  public function insert(string $name, string $email, string $password, ?bool $admin = false) : void {
+  public function insert(string $name, string $email, string $password, bool $isAdmin = false) : void {
     try {
       $create = $this->db->prepare("INSERT INTO users (name, email, password, admin) VALUES (:name, :email, :password, :admin)");
       $create->bindValue(':name', $name, PDO::PARAM_STR);
       $create->bindValue(':email', $email, PDO::PARAM_STR);
       $create->bindValue(':password', $password, PDO::PARAM_STR);
-      $create->bindValue(':admin', $admin, PDO::PARAM_BOOL);
+      $create->bindValue(':admin', $isAdmin, PDO::PARAM_BOOL);
       $create->execute();
       unset($_SESSION['csrf'], $_SESSION['flash'], $_SESSION['original'], $_SESSION['formData']);
     } catch (PDOException $e) {
