@@ -9,6 +9,7 @@ final class Redirect
   private const ADMIN_REGIST = "adminRegist";
   private const ADMIN_COMFIRM = "adminComfirm";
   private const TOP = "top";
+  private const BOOK_REGIST = "regBook";
 
   public static function redirectTo(string $location) : void {
     $path = self::getUrl($location);
@@ -35,6 +36,9 @@ final class Redirect
 
       case self::TOP:
         return "top.php";
+
+      case self::BOOK_REGIST:
+        return "admin/regBook.php";
       
       default:
         return "login.php";

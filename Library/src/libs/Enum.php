@@ -8,4 +8,5 @@ enum OperationMode : string  {
   case FromAdminComfirm = "104"; 
   case Login = "201"; 
   case Logout = "202"; 
+  case registBook = "301";
 }
