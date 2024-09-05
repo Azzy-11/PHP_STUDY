@@ -16,20 +16,17 @@ Csrf::checkToken();
 $type = (isset($_POST['type']) && is_string($_POST['type'])) ? $_POST['type'] : "";
 
 $priv = $_SESSION['user']['admin'];
-if ($priv === true) {
+if ($priv === 1) {
   match ($type) {
-    OperationMode::registBook => registBook(),
+    OperationMode::registBook->value => registBook($db),
   };
-}
-if ($priv === false) {
-  # code...
 }
 
 /**
  * 書籍登録処理
  * @param PDO $db
  */
-function registBook($db) : void {
+function registBook(PDO $db) : void {
   $bookTtl = Validation::checkRegBookValidation();
   $createBook = new Book($db);
   $createBook->insert($bookTtl);
