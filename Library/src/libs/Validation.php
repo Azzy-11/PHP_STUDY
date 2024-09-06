@@ -90,6 +90,21 @@ final class Validation
   }
 
   /**
+   * 書籍レンタル
+   */
+  public static function checkRentBookValidation() : string {
+    $bookId = self::getBookId();
+    if (self::isEmpty($bookId)) {
+      Redirect::redirectTo('bookList');
+    }
+    return $bookId;
+  }
+  
+  public static function getBookId() : string {
+    return (isset($_POST['bookId']) && is_string($_POST['bookId'])) ? $_POST['bookId'] : "";
+  }
+
+  /**
    * 共通
    */
   public static function isRegexMismatch($reg, $element) : bool {

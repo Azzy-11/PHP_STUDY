@@ -6,9 +6,14 @@ require_once('Redirect.php');
 final class Request
 {
   private const POST = "POST";
+  private const GET = "GET";
 
   public static function isPost() : bool {
     return $_SERVER['REQUEST_METHOD'] === self::POST;
+  }
+
+  public static function isGet() : bool {
+    return $_SERVER['REQUEST_METHOD'] === self::GET;
   }
 
   public static function exceptPost() : void {
