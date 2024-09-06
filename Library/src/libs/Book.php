@@ -37,7 +37,7 @@ class Book {
     try {
       $select = $this->db->prepare("SELECT * FROM books");
       $select->execute();
-      return $books = $select->fetchAll(PDO::FETCH_ASSOC);
+      return $select->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
       throw new Exception("Database Error: " . $e->getMessage());
     }
