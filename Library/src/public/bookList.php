@@ -9,7 +9,7 @@ require_once('../libs/Book.php');
 
 if (Request::isGet()) {
   $select = new Book($db);
-  $books = $select->find();
+  $books = $select->read();
 }
 Csrf::setToken();
 

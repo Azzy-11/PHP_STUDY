@@ -33,13 +33,27 @@ class Book {
     }
   }
 
-  public function find() : array {
+  public function read() : array {
     try {
       $select = $this->db->prepare("SELECT * FROM books");
       $select->execute();
       return $select->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
       throw new Exception("Database Error: " . $e->getMessage());
+    }
+  }
+
+  /**
+   * userがdbに存在するかどうか
+   * bookIDで検索し、1件ヒットだったらuser_idとborrowed_atに更新かける
+   * historymodel作って、insertメソッド作る
+   */
+
+  public function update() : void {
+    try {
+      
+    } catch (\Throwable $th) {
+      //throw $th;
     }
   }
 }
