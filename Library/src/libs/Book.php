@@ -26,10 +26,13 @@ class Book {
       $create->bindValue(':bookTitle', $bookTtl, PDO::PARAM_STR);
       $create->execute();
       unset($_SESSION['csrf'], $_SESSION['flash'], $_SESSION['original'], $_SESSION['formData']);
+
     } catch (PDOException $e) {
       throw new Exception("Database Error: " . $e->getMessage());
+
     } finally {
       Redirect::redirectTo("top");
+
     }
   }
 
@@ -38,22 +41,25 @@ class Book {
       $select = $this->db->prepare("SELECT * FROM books");
       $select->execute();
       return $select->fetchAll(PDO::FETCH_ASSOC);
+
     } catch (PDOException $e) {
       throw new Exception("Database Error: " . $e->getMessage());
+
     }
   }
 
-  /**
-   * userがdbに存在するかどうか
-   * bookIDで検索し、1件ヒットだったらuser_idとborrowed_atに更新かける
-   * historymodel作って、insertメソッド作る
-   */
+  public function select(string $bookId) : array {
+    $select = $this->db->prepare("SELECT book_title FROM books WHERE id = :id");
+    $select->bindValue(':id', $bookId);
+    $select->execute();
+    return $select->fetchAll(PDO::FETCH_ASSOC);
+  }
 
-  public function update() : void {
-    try {
-      
-    } catch (\Throwable $th) {
-      //throw $th;
-    }
+  public function update(string $bookId, int $userId, string $borrowedAt) : void {
+    $select = $this->db->prepare("UPDATE books SET user_id = :userId, borrowed_at = :borrowedAt WHERE id = :id");
+    $select->bindValue(':id', $bookId, PDO::PARAM_STR);
+    $select->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $select->bindValue(':borrowedAt', $borrowedAt, PDO::PARAM_STR);
+    $select->execute();
   }
 }

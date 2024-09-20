@@ -23,4 +23,22 @@ class User {
       Redirect::redirectTo("login");
     }
   }
+
+  public function isExist() : int {
+    $userId = (isset($_SESSION['user']['id']) && is_int($_SESSION['user']['id'])) ? $_SESSION['user']['id'] : "";
+    if ($userId !== "") {
+        $select = $this->db->prepare("SELECT admin from users WHERE id = :id");
+        $select->bindValue(':id', $userId, PDO::PARAM_INT);
+        $select->execute();
+        $userNum = count($select->fetchAll(PDO::FETCH_ASSOC));
+        if ($userNum !== 1) {
+          // Redirect::redirectTo("top");
+          echo "user1件じゃないよ";
+          exit();
+        }
+        return $userId;
+    }
+    echo "だれでもない";
+    exit();
+  }
 }

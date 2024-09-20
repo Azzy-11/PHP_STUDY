@@ -9,6 +9,7 @@ require_once('../libs/dbConnect.php');
 require_once('../libs/Book.php');
 require_once('../libs/Auth.php');
 require_once('../libs/Enum.php');
+require_once('../libs/Transaction.php');
 
 Auth::checkAuth();
 Request::exceptPost();
@@ -44,6 +45,7 @@ function registBook(PDO $db) : void {
 
 function rentBook(PDO $db) : void {
   $bookId = Validation::checkRentBookValidation();
-  var_dump($bookId);
-  exit();
+
+  $transaction = new Transaction($db);
+  $transaction->rentBook($bookId);
 }

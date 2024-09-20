@@ -38,8 +38,8 @@ entity histories <<T,TRANSACTION_MARK_COLOR>>{
   * id (PK) : INT
   --
   # user_id (FK) : INT
-  # books_id (FK) : CHAR(8)
-  # books_title (FK) : VARCHAR(64)
+  # book_id (FK) : CHAR(8)
+  # book_title (FK) : VARCHAR(64)
   * created_at : DATE
   * updated_at : DATE
 }
