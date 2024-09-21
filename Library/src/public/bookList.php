@@ -6,7 +6,10 @@ require_once('../libs/Request.php');
 require_once('../libs/Csrf.php');
 require_once('../libs/dbConnect.php');
 require_once('../libs/Book.php');
+require_once('../libs/Auth.php');
 
+
+Auth::checkAuth();
 if (Request::isGet()) {
   $select = new Book($db);
   $books = $select->read();
@@ -53,11 +56,14 @@ Csrf::setToken();
         <td><?php echo $bookId; ?></td>
         <td><?php echo $bookTtl; ?></td>
         <td><?php echo $bookStatus; ?></td>
-        <td>
-          <button type='button' onclick='sendBookId("<?php echo $bookId; ?>")'>選択</button>
-        </td>
+        <?php if($bookStatus === "レンタル可"): ?>
+          <td>
+            <button type='button' onclick='sendBookId("<?php echo $bookId; ?>")'>選択</button>
+          </td>
+        <?php endif; ?>
       </tr>
     <?php endforeach; ?>
   </table>
+  <a href="top.php">トップページ</a>
 </body>
 </html>

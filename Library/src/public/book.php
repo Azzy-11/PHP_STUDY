@@ -12,8 +12,8 @@ require_once('../libs/Auth.php');
 require_once('../libs/Enum.php');
 require_once('../libs/Transaction.php');
 
-Auth::checkAuth();
 Request::exceptPost();
+Auth::checkAuth();
 Csrf::checkToken();
 $type = (isset($_POST['type']) && is_string($_POST['type'])) ? $_POST['type'] : "";
 
