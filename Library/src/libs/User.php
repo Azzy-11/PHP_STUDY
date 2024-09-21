@@ -24,21 +24,21 @@ class User {
     }
   }
 
-  public function isExist() : int {
-    $userId = (isset($_SESSION['user']['id']) && is_int($_SESSION['user']['id'])) ? $_SESSION['user']['id'] : "";
+  public function select(int $userId) : array {
     if ($userId !== "") {
-        $select = $this->db->prepare("SELECT admin from users WHERE id = :id");
+        $select = $this->db->prepare("SELECT email from users WHERE id = :id");
         $select->bindValue(':id', $userId, PDO::PARAM_INT);
         $select->execute();
-        $userNum = count($select->fetchAll(PDO::FETCH_ASSOC));
-        if ($userNum !== 1) {
-          // Redirect::redirectTo("top");
-          echo "user1件じゃないよ";
-          exit();
-        }
-        return $userId;
+        return $select->fetchAll(PDO::FETCH_ASSOC);
     }
-    echo "だれでもない";
-    exit();
+  }
+
+  public function getId() : int {
+    return (isset($_SESSION['user']['id']) && is_int($_SESSION['user']['id'])) ? $_SESSION['user']['id'] : "";
+  }
+
+  public function isExist($users) : bool {
+    $email = (isset($_SESSION['user']['email']) && is_string($_SESSION['user']['email'])) ? $_SESSION['user']['email'] : "";
+    return (count($users) === 1 && $users[0]['email'] === $email) ? true : false;
   }
 }

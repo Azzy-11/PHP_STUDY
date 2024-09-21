@@ -49,7 +49,7 @@ class Book {
   }
 
   public function select(string $bookId) : array {
-    $select = $this->db->prepare("SELECT book_title FROM books WHERE id = :id");
+    $select = $this->db->prepare("SELECT book_title, borrowed_at FROM books WHERE id = :id");
     $select->bindValue(':id', $bookId);
     $select->execute();
     return $select->fetchAll(PDO::FETCH_ASSOC);
@@ -61,5 +61,9 @@ class Book {
     $select->bindValue(':userId', $userId, PDO::PARAM_INT);
     $select->bindValue(':borrowedAt', $borrowedAt, PDO::PARAM_STR);
     $select->execute();
+  }
+
+  public function isAvailable(array $books) : bool {
+    return (count($books) === 1 && empty($books[0]['borrowed_at'])) ? true : false;
   }
 }
