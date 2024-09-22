@@ -33,10 +33,6 @@ class User {
     }
   }
 
-  public function getId() : int {
-    return (isset($_SESSION['user']['id']) && is_int($_SESSION['user']['id'])) ? $_SESSION['user']['id'] : "";
-  }
-
   public function isExist($users) : bool {
     $email = (isset($_SESSION['user']['email']) && is_string($_SESSION['user']['email'])) ? $_SESSION['user']['email'] : "";
     return (count($users) === 1 && $users[0]['email'] === $email) ? true : false;
