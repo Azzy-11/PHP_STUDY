@@ -17,4 +17,17 @@ class History {
       $create->execute();
       unset($_SESSION['csrf']);
   }
+
+  public function read(int $userId) : array {
+    try {
+      $select = $this->db->prepare("SELECT * FROM histories WHERE user_id = :userId");
+      $select->bindValue(':userId', $userId, PDO::PARAM_INT);
+      $select->execute();
+      return $select->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch (PDOException $e) {
+      throw new Exception("Database Error: " . $e->getMessage());
+
+    }
+  }
 }

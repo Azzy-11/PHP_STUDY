@@ -31,7 +31,7 @@ $priv = (isset($_SESSION['user']['admin']) && is_int($_SESSION['user']['admin'])
     }
     ?>
     <li><a href="bookList.php">書籍レンタル（一覧表設置）</a></li>
-    <li><a href="">マイページ</a></li>
+    <li><a href="mypage.php">マイページ</a></li>
   </li>
 
 </body>
