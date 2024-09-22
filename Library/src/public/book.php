@@ -25,12 +25,14 @@ if (($priv !== 1 && $priv !== 0) || $priv === "") {
 if ($priv === 1) {
   match ($type) {
     OperationMode::registBook->value => registBook($db),
-    OperationMode::rentBook->value => rentBook($db)
+    OperationMode::rentBook->value => rentBook($db),
+    OperationMode::returnBook->value => returnBook($db)
   };
 }
 if ($priv === 0) {
   match ($type) {
-    OperationMode::rentBook->value => rentBook($db)
+    OperationMode::rentBook->value => rentBook($db),
+    OperationMode::returnBook->value => returnBook($db)
   };
 }
 
@@ -52,4 +54,14 @@ function rentBook(PDO $db) : void {
   $bookId = Validation::checkRentBookValidation();
   $transaction = new Transaction($db);
   $transaction->rentBook($bookId);
+}
+
+/**
+ * 書籍返却処理
+ * @param PDO $db
+ */
+function returnBook(PDO $db) : void {
+  $historyId = Validation::checkReturnBookValidation();
+  $transaction = new Transaction($db);
+  $transaction->returnBook($historyId);
 }

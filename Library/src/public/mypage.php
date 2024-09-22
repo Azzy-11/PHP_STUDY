@@ -24,17 +24,17 @@ Csrf::setToken();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>マイページ | Library</title>
   <script>
-    function sendBookId(id) {
-      document.getElementById('bookId').value = id;
-      document.getElementById('rentalForm').submit();
+    function sendHistoryId(id) {
+      document.getElementById('historyId').value = id;
+      document.getElementById('returnForm').submit();
     }
   </script>
 </head>
 <body>
   <h1><?php echo Preset::getUserName(); ?>さんのマイページ</h1>
-  <form id="rentalForm" action="book.php" method="post">
+  <form id="returnForm" action="book.php" method="post">
     <input type="hidden" name="csrfToken" value="<?php echo $_SESSION['csrf']; ?>">
-    <input type="hidden" name="bookId" id="bookId" value="">
+    <input type="hidden" name="historyId" id="historyId" value="">
     <input type="hidden" name="type" value="402">
   </form>
   <h2>レンタル履歴</h2>
@@ -48,10 +48,12 @@ Csrf::setToken();
     
     <?php foreach ($histories as $key => $history): ?>
       <?php
+      $historyId = (int)$history['id'];
       $bookId = htmlspecialchars($history['book_id'], ENT_QUOTES);
       $bookTtl = htmlspecialchars($history['book_title'], ENT_QUOTES);
       $borrowedAt = htmlspecialchars($history['created_at'], ENT_QUOTES);
       $updatedAt = htmlspecialchars($history['updated_at'], ENT_QUOTES);
+
       ?>
 
       <tr>
@@ -60,7 +62,7 @@ Csrf::setToken();
         <td><?php echo $borrowedAt; ?></td>
         <?php if($borrowedAt === $updatedAt): ?>
           <td>
-            <button type='button' onclick='sendBookId("<?php echo $bookId; ?>")'>返却</button>
+            <button type='button' onclick='sendHistoryId("<?php echo $historyId; ?>")'>返却</button>
           </td>
 
         <?php elseif($borrowedAt < $updatedAt): ?>

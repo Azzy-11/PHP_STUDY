@@ -30,4 +30,22 @@ class History {
 
     }
   }
+
+  public function select(int $historyId) : array {
+    $select = $this->db->prepare("SELECT * FROM histories WHERE id = :id");
+    $select->bindValue(':id', $historyId);
+    $select->execute();
+    return $select->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function update(int $historyId, string $updatedAt) : void {
+    $select = $this->db->prepare("UPDATE histories SET updated_at = :updatedAt WHERE id = :id");
+    $select->bindValue(':id', $historyId, PDO::PARAM_INT);
+    $select->bindValue(':updatedAt', $updatedAt, PDO::PARAM_INT);
+    $select->execute();
+  }
+
+  public function isOccupied(array $histories) : bool {
+    return (count($histories) === 1 && $histories[0]['created_at'] === $histories[0]['updated_at']) ? true : false;
+  }
 }

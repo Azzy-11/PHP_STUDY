@@ -10,4 +10,5 @@ enum OperationMode : string  {
   case Logout = "202"; 
   case registBook = "301";
   case rentBook = "401";
+  case returnBook = "402";
 }

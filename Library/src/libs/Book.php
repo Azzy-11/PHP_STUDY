@@ -49,13 +49,13 @@ class Book {
   }
 
   public function select(string $bookId) : array {
-    $select = $this->db->prepare("SELECT book_title, borrowed_at FROM books WHERE id = :id");
+    $select = $this->db->prepare("SELECT * FROM books WHERE id = :id");
     $select->bindValue(':id', $bookId);
     $select->execute();
     return $select->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function update(string $bookId, int $userId, string $borrowedAt) : void {
+  public function update(string $bookId, int $userId = null, string $borrowedAt = null) : void {
     $select = $this->db->prepare("UPDATE books SET user_id = :userId, borrowed_at = :borrowedAt WHERE id = :id");
     $select->bindValue(':id', $bookId, PDO::PARAM_STR);
     $select->bindValue(':userId', $userId, PDO::PARAM_INT);
@@ -65,5 +65,9 @@ class Book {
 
   public function isAvailable(array $books) : bool {
     return (count($books) === 1 && empty($books[0]['borrowed_at'])) ? true : false;
+  }
+
+  public function isOccupied(array $books) : bool {
+    return (count($books) === 1 && !empty($books[0]['borrowed_at'])) ? true : false;
   }
 }

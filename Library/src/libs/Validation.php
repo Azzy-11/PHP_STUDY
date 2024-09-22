@@ -99,9 +99,21 @@ final class Validation
     }
     return $bookId;
   }
+
+  public static function checkReturnBookValidation() : int {
+    $historyId = self::getHistoryId();
+    if (self::isEmpty($historyId)) {
+      Redirect::redirectTo('bookList');
+    }
+    return (int)$historyId;
+  }
   
   public static function getBookId() : string {
     return (isset($_POST['bookId']) && is_string($_POST['bookId'])) ? $_POST['bookId'] : "";
+  }
+
+  public static function getHistoryId() : string {
+    return (isset($_POST['historyId']) && is_string($_POST['historyId'])) ? $_POST['historyId'] : "";
   }
 
   /**
