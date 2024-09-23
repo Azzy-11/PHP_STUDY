@@ -18,21 +18,22 @@ class Transaction {
       $bookMdl = new Book($this->db);
       $historyMdl = new History($this->db);
 
-      $this->db->beginTransaction();
-
+      
       $userId = Preset::getUserId();
       $users = $userMdl->select($userId);
       if ($userMdl->isExist($users) === false) {
         Redirect::redirectTo("bookList");
         exit();
       }
-  
+      
       $books = $bookMdl->select($bookId);
-
+      
       if ($bookMdl->isAvailable($books) === false) {
         Redirect::redirectTo("bookList");
         exit();
       }
+      
+      $this->db->beginTransaction();
 
       $borrowedAt = date('Y-m-d H:i:s');
       $bookMdl->update($bookId, $userId, $borrowedAt);
@@ -59,31 +60,27 @@ class Transaction {
       $bookMdl = new Book($this->db);
       $historyMdl = new History($this->db);
 
-      $this->db->beginTransaction();
-
+      
       $userId = Preset::getUserId();
       $users = $userMdl->select($userId);
       if ($userMdl->isExist($users) === false) {
         Redirect::redirectTo("mypage");
         exit();
       }
-  
+      
       $histories = $historyMdl->select($historyId);
       if ($historyMdl->isOccupied($histories) === false) {
         Redirect::redirectTo("mypage");
         exit();
       }
-
+      
       // historyRecord側チェック
       $historyBorrower = (int)$histories[0]['user_id'];
       if ($userId !== $historyBorrower) {
         Redirect::redirectTo("mypage");
         exit();
       }
-
-      $updatedAt = date('Y-m-d H:i:s');
-      $historyMdl->update($historyId, $updatedAt);
-
+      
       // bookRecord側チェック
       $bookId = $histories[0]['book_id'];
       $books = $bookMdl->select($bookId);
@@ -96,7 +93,11 @@ class Transaction {
         Redirect::redirectTo("mypage");
         exit();
       }
-
+      
+      $this->db->beginTransaction();
+      
+      $updatedAt = date('Y-m-d H:i:s');
+      $historyMdl->update($historyId, $updatedAt);
       $bookMdl->update($bookId);
 
       $this->db->commit();
